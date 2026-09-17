@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Technology & Development — Building Ideas. Creating Technology.</title>
+<meta name="description" content="GK Technology & Development is an independent technology and development brand founded by Gautam Krishnan V, building IDEAVERSE, a personal AI, and future technology projects.">
+<meta name="theme-color" content="#0B1548">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#FFFFFF;
+    --bg-alt:#F5F7FC;
+    --surface:rgba(255,255,255,0.62);
+    --surface-solid:#FFFFFF;
+    --text:#0A0E1A;
+    --text-muted:#545C70;
+    --accent:#1B49D6;
+    --accent-bright:#3E6BFF;
+    --accent-deep:#0B1548;
+    --accent-glow:#6FE3FF;
+    --border:rgba(10,14,26,0.09);
+    --shadow:rgba(16,24,64,0.14);
+    --dot:rgba(10,14,26,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#05070F;
+      --bg-alt:#0A0E1F;
+      --surface:rgba(18,24,46,0.55);
+      --surface-solid:#0D1226;
+      --text:#EAF0FF;
+      --text-muted:#99A3C4;
+      --accent:#6C97FF;
+      --accent-bright:#8FB0FF;
+      --accent-deep:#0B1548;
+      --accent-glow:#6FE3FF;
+      --border:rgba(255,255,255,0.10);
+      --shadow:rgba(0,0,0,0.55);
+      --dot:rgba(255,255,255,0.07);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#05070F;
+    --bg-alt:#0A0E1F;
+    --surface:rgba(18,24,46,0.55);
+    --surface-solid:#0D1226;
+    --text:#EAF0FF;
+    --text-muted:#99A3C4;
+    --accent:#6C97FF;
+    --accent-bright:#8FB0FF;
+    --accent-deep:#0B1548;
+    --accent-glow:#6FE3FF;
+    --border:rgba(255,255,255,0.10);
+    --shadow:rgba(0,0,0,0.55);
+    --dot:rgba(255,255,255,0.07);
+  }
+
+  /* ============ RESET ============ */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background .4s ease,color .4s ease;
+  }
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  button,input,textarea{font-family:inherit;font-size:inherit;color:inherit;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;}
+  section{position:relative;}
+  .container{max-width:1180px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,2.5rem);}
+
+  :focus-visible{outline:2px solid var(--accent-bright);outline-offset:3px;border-radius:4px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
+
+  /* ============ BACKGROUND TEXTURE ============ */
+  .dot-field{
+    position:absolute;inset:0;
+    background-image:radial-gradient(circle, var(--dot) 1px, transparent 1px);
+    background-size:26px 26px;
+    pointer-events:none;
+  }
+
+  /* ============ NAV ============ */
+  .navbar{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(255,255,255,0.55);
+    backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, box-shadow .3s ease, background .4s ease;
+  }
+  :root[data-theme="dark"] .navbar, @media (prefers-color-scheme:dark){}
+  .navbar{background:var(--surface);}
+  .navbar.scrolled{border-bottom-color:var(--border);box-shadow:0 8px 30px var(--shadow);}
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    height:72px;
+  }
+  .brand{display:flex;align-items:center;gap:.7rem;font-weight:600;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:11px;flex:none;
+    background:linear-gradient(135deg,var(--accent-bright),var(--accent-deep));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.85rem;
+    box-shadow:0 6px 18px rgba(27,73,214,0.35);
+  }
+  .brand-text{font-family:'Space Grotesk',sans-serif;font-size:1.02rem;font-weight:600;white-space:nowrap;}
+  .brand-text small{display:block;font-family:'Inter',sans-serif;font-weight:400;font-size:.68rem;color:var(--text-muted);letter-spacing:.01em;}
+
+  .nav-links{display:flex;align-items:center;gap:2.1rem;}
+  .nav-links a{
+    font-size:.94rem;font-weight:500;color:var(--text-muted);
+    position:relative;padding:.3rem 0;transition:color .25s ease;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:-2px;width:0;height:2px;
+    background:var(--accent-bright);transition:width .3s ease;
+  }
+  .nav-links a:hover,.nav-links a:focus-visible{color:var(--text);}
+  .nav-links a:hover::after,.nav-links a:focus-visible::after{width:100%;}
+
+  .nav-cta{
+    padding:.6rem 1.3rem;border-radius:999px;font-size:.88rem;font-weight:600;
+    background:var(--accent);color:#fff;border:1px solid transparent;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .nav-cta:hover{background:var(--accent-bright);transform:translateY(-2px);box-shadow:0 10px 24px rgba(27,73,214,0.35);}
+
+  .nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:.4rem;}
+  .nav-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;border-radius:2px;transition:transform .3s ease,opacity .3s ease;}
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-toggle.open span:nth-child(2){opacity:0;}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  .mobile-menu{
+    display:none;position:fixed;top:72px;left:0;right:0;z-index:99;
+    background:var(--surface-solid);border-bottom:1px solid var(--border);
+    box-shadow:0 20px 40px var(--shadow);
+    max-height:0;overflow:hidden;transition:max-height .4s ease;
+  }
+  .mobile-menu.open{max-height:340px;}
+  .mobile-menu ul{padding:1.2rem clamp(1.25rem,4vw,2.5rem);display:flex;flex-direction:column;gap:1.1rem;}
+  .mobile-menu a{font-size:1rem;font-weight:500;}
+  .mobile-menu .nav-cta{display:inline-block;width:fit-content;}
+
+  @media (max-width:860px){
+    .nav-links{display:none;}
+    .nav-toggle{display:block;}
+    .mobile-menu{display:block;}
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:100vh;display:flex;align-items:center;
+    padding-top:110px;padding-bottom:5rem;
+    overflow:hidden;
+  }
+  .hero-decor{position:absolute;inset:0;z-index:0;pointer-events:none;}
+  .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;}
+  .blob-a{width:480px;height:480px;top:-140px;right:-120px;background:radial-gradient(circle,var(--accent-bright),transparent 70%);animation:float1 16s ease-in-out infinite;}
+  .blob-b{width:380px;height:380px;bottom:-120px;left:-100px;background:radial-gradient(circle,var(--accent-glow),transparent 70%);animation:float2 20s ease-in-out infinite;}
+  @keyframes float1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-30px,40px) scale(1.08);}}
+  @keyframes float2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(40px,-30px) scale(1.05);}}
+
+  .network-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.55;}
+  .network-svg circle{fill:var(--accent-bright);}
+  .network-svg line{stroke:var(--accent);stroke-width:1;opacity:.35;}
+  .network-svg .pulse{animation:pulseDot 4.5s ease-in-out infinite;}
+  @keyframes pulseDot{0%,100%{opacity:.25;r:2.4;}50%{opacity:.9;r:3.6;}}
+
+  .hero-inner{position:relative;z-index:2;max-width:760px;margin-inline:auto;text-align:center;}
+  .hero h1{
+    font-size:clamp(2.3rem,6.4vw,4.6rem);
+    font-weight:700;line-height:1.06;
+    background:linear-gradient(100deg,var(--text) 30%, var(--accent) 60%, var(--accent-bright) 85%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero .tagline{
+    margin-top:1.1rem;font-size:clamp(1.05rem,2.2vw,1.4rem);
+    font-weight:500;color:var(--text-muted);font-family:'Space Grotesk',sans-serif;
+  }
+  .hero p.intro{
+    margin:1.6rem auto 0;max-width:560px;color:var(--text-muted);font-size:1.02rem;
+  }
+  .hero-actions{
+    margin-top:2.6rem;display:flex;align-items:center;justify-content:center;gap:1.1rem;flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:.55rem;
+    padding:.95rem 1.9rem;border-radius:999px;font-weight:600;font-size:.98rem;
+    border:1px solid transparent;cursor:pointer;transition:transform .3s ease, box-shadow .3s ease, background .3s ease, color .3s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(120deg,var(--accent),var(--accent-bright));
+    color:#fff;position:relative;
+    box-shadow:0 0 0 0 rgba(62,107,255,0.45);
+    animation:glowPulse 2.8s ease-in-out infinite;
+  }
+  @keyframes glowPulse{
+    0%,100%{box-shadow:0 8px 24px rgba(27,73,214,.28);}
+    50%{box-shadow:0 8px 34px rgba(62,107,255,.55);}
+  }
+  .btn-primary:hover{transform:translateY(-3px);}
+  .btn-primary svg{transition:transform .3s ease;}
+  .btn-primary:hover svg{transform:translateY(3px);}
+  .btn-ghost{
+    background:var(--surface);backdrop-filter:blur(10px);
+    border-color:var(--border);color:var(--text);
+  }
+  .btn-ghost:hover{transform:translateY(-3px);border-color:var(--accent);}
+
+  .scroll-cue{
+    position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:.4rem;
+    color:var(--text-muted);font-size:.72rem;letter-spacing:.04em;z-index:2;
+  }
+  .scroll-cue span.chevron{animation:bounce 2.2s ease-in-out infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease, transform .8s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* ============ SECTION HEADS ============ */
+  .section-pad{padding-block:clamp(4.5rem,9vw,7.5rem);}
+  .section-head{max-width:640px;margin-bottom:3.4rem;}
+  .section-head h2{font-size:clamp(1.9rem,3.6vw,2.7rem);font-weight:600;}
+  .section-head p{margin-top:.9rem;color:var(--text-muted);font-size:1.02rem;}
+  .alt-bg{background:var(--bg-alt);}
+
+  /* ============ TIMELINE ============ */
+  .timeline{position:relative;display:flex;flex-direction:column;gap:3.2rem;}
+  .timeline::before{
+    content:'';position:absolute;left:28px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--accent),var(--accent-glow));
+    transform-origin:top;transform:scaleY(0);transition:transform 1.1s ease;
+  }
+  .timeline.visible::before{transform:scaleY(1);}
+
+  .t-item{position:relative;display:grid;grid-template-columns:56px 1fr;gap:0 1.6rem;align-items:start;}
+  .t-node{
+    width:56px;height:56px;border-radius:50%;position:relative;z-index:2;
+    background:var(--surface-solid);border:2px solid var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--accent);
+    box-shadow:0 6px 20px var(--shadow);
+  }
+  .t-node.dim{border-color:var(--border);color:var(--text-muted);}
+  .t-node .ring{
+    position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--accent-glow);
+    opacity:0;animation:ringPulse 3s ease-out infinite;
+  }
+  @keyframes ringPulse{0%{opacity:.55;transform:scale(.85);}100%{opacity:0;transform:scale(1.35);}}
+
+  .t-card{
+    background:var(--surface);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+    border:1px solid var(--border);border-radius:20px;padding:1.7rem 1.9rem;
+    transition:transform .4s ease, box-shadow .4s ease, border-color .4s ease;
+  }
+  .t-card:hover{transform:translateY(-6px);box-shadow:0 22px 44px var(--shadow);border-color:var(--accent);}
+  .t-card .t-status{
+    display:inline-flex;align-items:center;gap:.4rem;font-size:.76rem;font-weight:600;
+    color:var(--accent);background:rgba(27,73,214,0.09);border-radius:999px;padding:.3rem .75rem;margin-bottom:.85rem;
+  }
+  .t-card .t-status.unknown{color:var(--text-muted);background:rgba(84,92,112,0.1);}
+  .t-card h3{font-size:1.28rem;font-weight:600;margin-bottom:.55rem;}
+  .t-card .t-sub{font-size:.85rem;color:var(--text-muted);font-weight:500;margin-bottom:.7rem;font-family:'Space Grotesk',sans-serif;}
+  .t-card p{color:var(--text-muted);font-size:.98rem;}
+
+  @media (min-width:860px){
+    .timeline{gap:4.2rem;}
+    .timeline::before{left:50%;margin-left:-1px;}
+    .t-item{grid-template-columns:1fr 64px 1fr;gap:0 2rem;}
+    .t-item .t-node{grid-column:2;justify-self:center;}
+    .t-item:nth-child(odd) .t-card{grid-column:1;grid-row:1;text-align:right;}
+    .t-item:nth-child(odd) .t-card .t-status{margin-left:auto;}
+    .t-item:nth-child(even) .t-card{grid-column:3;grid-row:1;}
+    .t-item .t-node{grid-row:1;}
+  }
+
+  /* ============ MORE PROJECTS ============ */
+  .more-projects{overflow:hidden;}
+  .more-inner{text-align:center;max-width:620px;margin-inline:auto;}
+  .more-inner h2{font-size:clamp(1.8rem,3.4vw,2.4rem);font-weight:600;}
+  .more-inner p{margin-top:.9rem;color:var(--text-muted);}
+  .future-row{
+    margin-top:3rem;display:flex;justify-content:center;gap:1.3rem;flex-wrap:wrap;
+  }
+  .future-card{
+    width:130px;height:150px;border-radius:18px;border:1.5px dashed var(--border);
+    background:var(--surface);backdrop-filter:blur(12px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;
+    transition:transform .35s ease, border-color .35s ease;
+  }
+  .future-card:hover{transform:translateY(-6px);border-color:var(--accent);}
+  .future-card .mark{
+    font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);
+    animation:softPulse 3.2s ease-in-out infinite;
+  }
+  .future-card:nth-child(2) .mark{animation-delay:.4s;}
+  .future-card:nth-child(3) .mark{animation-delay:.8s;}
+  .future-card:nth-child(4) .mark{animation-delay:1.2s;}
+  @keyframes softPulse{0%,100%{opacity:.45;}50%{opacity:1;}}
+  .future-card span.label{font-size:.72rem;color:var(--text-muted);letter-spacing:.02em;}
+  .future-trail{margin-top:2.6rem;display:flex;justify-content:center;gap:.5rem;}
+  .future-trail i{width:6px;height:6px;border-radius:50%;background:var(--accent-glow);opacity:.35;animation:trailFade 2.4s ease-in-out infinite;}
+  .future-trail i:nth-child(2){animation-delay:.3s;}
+  .future-trail i:nth-child(3){animation-delay:.6s;}
+  .future-trail i:nth-child(4){animation-delay:.9s;}
+  .future-trail i:nth-child(5){animation-delay:1.2s;}
+  @keyframes trailFade{0%,100%{opacity:.2;}50%{opacity:.9;}}
+
+  /* ============ ABOUT ============ */
+  .about-grid{display:grid;grid-template-columns:1fr;gap:2.8rem;}
+  @media (min-width:900px){.about-grid{grid-template-columns:1.15fr .85fr;gap:3.5rem;align-items:start;}}
+  .about-copy p{color:var(--text-muted);font-size:1.03rem;margin-bottom:1.1rem;max-width:56ch;}
+  .focus-tags{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.6rem;}
+  .focus-tags span{
+    padding:.5rem 1rem;border-radius:999px;border:1px solid var(--border);
+    font-size:.85rem;font-weight:500;color:var(--text);background:var(--surface);
+  }
+
+  .founder-card{
+    background:var(--surface);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+    border:1px solid var(--border);border-radius:24px;padding:2.2rem;
+    box-shadow:0 24px 50px var(--shadow);
+    position:relative;overflow:hidden;
+  }
+  .founder-card::before{
+    content:'';position:absolute;top:-40%;right:-30%;width:220px;height:220px;border-radius:50%;
+    background:radial-gradient(circle,var(--accent-glow),transparent 70%);opacity:.25;filter:blur(10px);
+  }
+  .founder-avatar{
+    width:74px;height:74px;border-radius:20px;position:relative;z-index:1;
+    background:linear-gradient(135deg,var(--accent-bright),var(--accent-deep));
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.4rem;
+    box-shadow:0 10px 26px rgba(27,73,214,0.35);
+  }
+  .founder-role{margin-top:1.3rem;font-size:.78rem;font-weight:600;letter-spacing:.03em;color:var(--accent);text-transform:uppercase;position:relative;z-index:1;}
+  .founder-name{margin-top:.35rem;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:600;position:relative;z-index:1;}
+  .founder-card p{margin-top:.9rem;color:var(--text-muted);font-size:.94rem;position:relative;z-index:1;}
+
+  /* ============ CONTACT ============ */
+  .contact-grid{display:grid;grid-template-columns:1fr;gap:2.6rem;}
+  @media (min-width:900px){.contact-grid{grid-template-columns:.85fr 1.15fr;gap:3.5rem;}}
+
+  .whatsapp-btn{
+    display:inline-flex;align-items:center;gap:.8rem;
+    background:#159a4a;color:#fff;padding:1rem 1.7rem;border-radius:16px;
+    font-weight:600;font-size:1rem;box-shadow:0 14px 30px rgba(21,154,74,0.3);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .whatsapp-btn:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(21,154,74,0.4);}
+  .whatsapp-btn .ic{width:26px;height:26px;flex:none;}
+  .contact-number{margin-top:1.1rem;font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:var(--text);}
+  .contact-copy p{color:var(--text-muted);margin-bottom:1.4rem;max-width:44ch;}
+
+  .form-card{
+    background:var(--surface);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+    border:1px solid var(--border);border-radius:24px;padding:2.1rem;
+    box-shadow:0 24px 50px var(--shadow);
+  }
+  .field{margin-bottom:1.2rem;}
+  .field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.45rem;}
+  .field input,.field textarea{
+    width:100%;padding:.85rem 1rem;border-radius:12px;
+    border:1px solid var(--border);background:var(--surface-solid);color:var(--text);
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .field textarea{resize:vertical;min-height:110px;}
+  .field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(27,73,214,0.14);outline:none;}
+  .form-note{font-size:.8rem;color:var(--text-muted);margin-top:.9rem;}
+  .form-status{font-size:.85rem;margin-top:.8rem;color:var(--accent);min-height:1.2em;}
+
+  /* ============ FOOTER ============ */
+  .site-footer{background:var(--accent-deep);color:#EAF0FF;padding-block:3.6rem 1.8rem;}
+  .footer-grid{display:grid;grid-template-columns:1fr;gap:2.4rem;}
+  @media (min-width:760px){.footer-grid{grid-template-columns:1.3fr 1fr 1fr;gap:2rem;}}
+  .footer-brand .brand-mark{box-shadow:none;}
+  .footer-brand .brand-text{color:#EAF0FF;}
+  .footer-brand .brand-text small{color:rgba(234,240,255,0.6);}
+  .footer-tagline{margin-top:1rem;color:rgba(234,240,255,0.65);font-family:'Space Grotesk',sans-serif;font-size:.95rem;max-width:32ch;}
+  .footer-col h4{font-size:.85rem;letter-spacing:.03em;font-weight:600;color:rgba(234,240,255,0.85);margin-bottom:1rem;}
+  .footer-col ul{display:flex;flex-direction:column;gap:.7rem;}
+  .footer-col a{color:rgba(234,240,255,0.65);font-size:.92rem;transition:color .25s ease;}
+  .footer-col a:hover{color:#fff;}
+  .footer-bottom{
+    margin-top:3rem;padding-top:1.6rem;border-top:1px solid rgba(234,240,255,0.12);
+    display:flex;flex-direction:column;gap:.5rem;align-items:center;text-align:center;
+  }
+  .footer-bottom p{font-size:.82rem;color:rgba(234,240,255,0.55);}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="#home" class="brand" aria-label="GK Technology & Development, home">
+      <span class="brand-mark">GK</span>
+      <span class="brand-text">GK Technology &amp; Development<small>Building Ideas. Creating Technology.</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#home">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+</div>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="home">
+    <div class="hero-decor" aria-hidden="true">
+      <div class="blob blob-a"></div>
+      <div class="blob blob-b"></div>
+      <svg class="network-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+        <line x1="120" y1="140" x2="340" y2="260"></line>
+        <line x1="340" y1="260" x2="600" y2="120"></line>
+        <line x1="600" y1="120" x2="880" y2="220"></line>
+        <line x1="880" y1="220" x2="1080" y2="110"></line>
+        <line x1="340" y1="260" x2="420" y2="480"></line>
+        <line x1="420" y1="480" x2="700" y2="560"></line>
+        <line x1="700" y1="560" x2="960" y2="480"></line>
+        <line x1="880" y1="220" x2="960" y2="480"></line>
+        <line x1="120" y1="140" x2="180" y2="420"></line>
+        <line x1="180" y1="420" x2="420" y2="480"></line>
+        <circle class="pulse" cx="120" cy="140" r="3"></circle>
+        <circle class="pulse" cx="340" cy="260" r="3"></circle>
+        <circle class="pulse" cx="600" cy="120" r="3"></circle>
+        <circle class="pulse" cx="880" cy="220" r="3"></circle>
+        <circle class="pulse" cx="1080" cy="110" r="3"></circle>
+        <circle class="pulse" cx="420" cy="480" r="3"></circle>
+        <circle class="pulse" cx="700" cy="560" r="3"></circle>
+        <circle class="pulse" cx="960" cy="480" r="3"></circle>
+        <circle class="pulse" cx="180" cy="420" r="3"></circle>
+      </svg>
+      <div class="dot-field"></div>
+    </div>
+
+    <div class="container hero-inner">
+      <h1>GK TECHNOLOGY &amp; DEVELOPMENT</h1>
+      <p class="tagline">Building Ideas. Creating Technology.</p>
+      <p class="intro">An independent technology and development brand founded by Gautam Krishnan V. Every project here starts as a rough idea and is built, piece by piece, into working technology &mdash; software, AI and everything in between.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">
+          Explore Projects
+          <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </a>
+        <a href="#about" class="btn btn-ghost">About the brand</a>
+      </div>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span>SCROLL</span>
+      <span class="chevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section-pad" id="projects">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>Projects</h2>
+        <p>A running log of what's being built, and what's coming next.</p>
+      </div>
+
+      <div class="timeline" id="timeline">
+        <div class="t-item reveal">
+          <div class="t-node"><span class="ring"></span>01</div>
+          <div class="t-card">
+            <span class="t-status">Releasing 18 December 2026</span>
+            <h3>IDEAVERSE</h3>
+            <p class="t-sub">Project 01 &middot; Idea-sharing platform</p>
+            <p>A space for sharing ideas, inspiring minds, and building together. IDEAVERSE gives people a place to put raw ideas into the open, get feedback from people who care about building things, and find collaborators to bring those ideas to life.</p>
+          </div>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-node"><span class="ring"></span>02</div>
+          <div class="t-card">
+            <span class="t-status">Planned for end of 2027</span>
+            <h3>Personal AI &mdash; JARVIS</h3>
+            <p class="t-sub">Project 02 &middot; Personal AI</p>
+            <p>A future personal AI project focused on understanding context and working alongside the people who use it, rather than just responding to commands. Still early, still evolving.</p>
+          </div>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-node dim"><span class="ring"></span>03</div>
+          <div class="t-card">
+            <span class="t-status unknown">Targeted for 2030 &ndash; 2031</span>
+            <h3>Unknown</h3>
+            <p class="t-sub">Project 03 &middot; Concept not yet decided</p>
+            <p>The concept for this project hasn't been decided yet. It's reserved for whatever idea deserves to be built next, whenever that idea arrives.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MORE PROJECTS ============ -->
+  <section class="section-pad more-projects alt-bg">
+    <div class="container more-inner reveal">
+      <h2>Many More Projects Coming</h2>
+      <p>GK Technology &amp; Development is an ongoing body of work, not a fixed list. New ideas, tools and projects will keep getting added as they're ready to build.</p>
+      <div class="future-row">
+        <div class="future-card"><span class="mark">?</span><span class="label">Future project</span></div>
+        <div class="future-card"><span class="mark">?</span><span class="label">Future project</span></div>
+        <div class="future-card"><span class="mark">?</span><span class="label">Future project</span></div>
+        <div class="future-card"><span class="mark">?</span><span class="label">Future project</span></div>
+      </div>
+      <div class="future-trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section-pad" id="about">
+    <div class="container about-grid">
+      <div class="about-copy reveal">
+        <div class="section-head" style="margin-bottom:1.4rem;">
+          <h2>About</h2>
+        </div>
+        <p>GK Technology &amp; Development is an independent technology and development brand &mdash; not a registered company, but a personal practice built around software, artificial intelligence and other innovative digital projects.</p>
+        <p>It exists as a space to design, build and ship original technology, one project at a time: from idea-sharing platforms to personal AI systems and whatever comes after them.</p>
+        <div class="focus-tags">
+          <span>Software</span>
+          <span>Artificial Intelligence</span>
+          <span>Digital Products</span>
+          <span>Independent Development</span>
+        </div>
+      </div>
+
+      <div class="founder-card reveal">
+        <div class="founder-avatar">GK</div>
+        <p class="founder-role">Owner &amp; Founder</p>
+        <p class="founder-name">Gautam Krishnan V</p>
+        <p>Every project under GK Technology &amp; Development is designed, built and maintained personally by Gautam Krishnan V &mdash; from the first rough idea through to a finished, working product.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section-pad alt-bg" id="contact">
+    <div class="container contact-grid">
+      <div class="contact-copy reveal">
+        <div class="section-head" style="margin-bottom:1.6rem;">
+          <h2>Contact</h2>
+          <p>Have an idea, a question, or want to collaborate? Reach out directly.</p>
+        </div>
+        <a class="whatsapp-btn" href="https://wa.me/919074857752" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp with GK Technology & Development">
+          <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.36 2 11.75c0 2.06.66 3.97 1.79 5.55L2.5 21.5l4.4-1.24a10.3 10.3 0 0 0 5.1 1.35c5.52 0 10-4.36 10-9.75S17.52 2 12 2zm0 17.7c-1.66 0-3.2-.46-4.5-1.26l-.32-.19-2.67.75.75-2.55-.21-.33A7.7 7.7 0 0 1 3.9 11.75C3.9 7.4 7.53 3.9 12 3.9s8.1 3.5 8.1 7.85-3.63 7.95-8.1 7.95zm4.42-5.87c-.24-.12-1.44-.7-1.66-.78-.22-.08-.38-.12-.55.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.37-1.94-1.18-.72-.63-1.2-1.4-1.34-1.64-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.3-.75-1.78-.2-.47-.4-.4-.55-.41h-.47c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.13 3.64.58.25 1.03.4 1.38.51.58.18 1.1.16 1.52.1.46-.07 1.44-.59 1.64-1.15.2-.57.2-1.05.14-1.15-.06-.1-.22-.16-.46-.28z"/></svg>
+          Chat on WhatsApp
+        </a>
+        <p class="contact-number">+91 90748 57752</p>
+        <p class="form-note">Message directly on WhatsApp for the fastest response, or send a message using the form.</p>
+      </div>
+
+      <form class="form-card reveal" id="contactForm">
+        <div class="field">
+          <label for="cf-name">Name</label>
+          <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Your name">
+        </div>
+        <div class="field">
+          <label for="cf-email">Email</label>
+          <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" required placeholder="Tell me about your idea, question or project..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;animation:none;">
+          Send via WhatsApp
+        </button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="#home" class="brand" aria-label="GK Technology & Development, home">
+        <span class="brand-mark">GK</span>
+        <span class="brand-text">GK Technology &amp; Development</span>
+      </a>
+      <p class="footer-tagline">Building Ideas. Creating Technology.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <ul>
+        <li><a href="#projects">IDEAVERSE &mdash; 2026</a></li>
+        <li><a href="#projects">Personal AI / JARVIS &mdash; 2027</a></li>
+        <li><a href="#projects">Unknown &mdash; 2030&ndash;2031</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://wa.me/919074857752" target="_blank" rel="noopener noreferrer">WhatsApp: +91 90748 57752</a></li>
+        <li><a href="#about">Gautam Krishnan V &mdash; Founder</a></li>
+        <li><a href="#contact">Get in touch</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p id="copyright">&copy; 2026 GK Technology &amp; Development. All rights reserved.</p>
+    <p>An independent technology and development brand owned by Gautam Krishnan V.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Nav scroll shadow
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 20){ navbar.classList.add('scrolled'); }
+    else { navbar.classList.remove('scrolled'); }
+  }, { passive:true });
+
+  // Mobile menu toggle
+  var toggle = document.getElementById('navToggle');
+  var menu = document.getElementById('mobileMenu');
+  toggle.addEventListener('click', function(){
+    var isOpen = menu.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      menu.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+    });
+  });
+
+  // Reveal on scroll
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry, i){
+        if(entry.isIntersecting){
+          entry.target.style.transitionDelay = (i % 3) * 0.08 + 's';
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.15 });
+    revealEls.forEach(function(el){ io.observe(el); });
+
+    var timeline = document.getElementById('timeline');
+    var tio = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          timeline.classList.add('visible');
+          tio.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.1 });
+    tio.observe(timeline);
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('visible'); });
+    document.getElementById('timeline').classList.add('visible');
+  }
+
+  // Contact form -> WhatsApp
+  var form = document.getElementById('contactForm');
+  var status = document.getElementById('formStatus');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('cf-name').value.trim();
+    var email = document.getElementById('cf-email').value.trim();
+    var message = document.getElementById('cf-message').value.trim();
+    if(!name || !email || !message){
+      status.textContent = 'Please fill in every field before sending.';
+      return;
+    }
+    var text = 'Hi GK Technology & Development, my name is ' + name + ' (' + email + ').\n\n' + message;
+    var url = 'https://wa.me/919074857752?text=' + encodeURIComponent(text);
+    status.textContent = 'Opening WhatsApp...';
+    window.open(url, '_blank', 'noopener,noreferrer');
+    form.reset();
+  });
+
+  // Footer year (keeps copyright accurate if reopened in future years)
+  var yearEl = document.getElementById('copyright');
+  var year = new Date().getFullYear();
+  yearEl.textContent = '\u00A9 ' + year + ' GK Technology & Development. All rights reserved.';
+})();
+</script>
+</body>
+</html>
